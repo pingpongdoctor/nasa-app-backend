@@ -33,11 +33,14 @@ exports.loginAccount = async function (req, res) {
           expiresIn: "1h",
         });
         //RESPONSE REFRESH TOKEN IN COOKIE AND ACCESS TOKEN IN THE SEND METHOD
+        //THE COOKIE EXPIRY TIME IS 1 HOUR
         res
           .status(200)
           .cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-            samesite: "strict",
+            maxAge: 60 * 60 * 1000,
+            httpOnly: true, //Avoid XSS
+            samesite: "strict", //Avoid Cross-site request forgery
+            // secure: true, Use this to only allow cookie sent on https (need SSL/TLS certificate)
           })
           .send(accessToken);
       } else {
