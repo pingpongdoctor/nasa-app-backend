@@ -4,6 +4,8 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const PORT = process.env.PORT || 8080;
+const loginRoute = require("./routes/loginRoute");
+const signupRoute = require("./routes/signupRoute");
 
 //APPLY CORS MIDDLEWARE TO ALLOW DATABASE ACCESSED FROM ANY DOMAINS
 app.use(cors());
@@ -12,6 +14,10 @@ app.use(express.json());
 
 //CONNECT TO THE MONGODB DATABASE
 handleConnectMongoDBServer();
+
+//APPLY ROUTES
+app.use("/login", loginRoute);
+app.use("/signup", signupRoute);
 
 //START THE SERVER
 app.listen(PORT, (req, res) => {
