@@ -10,12 +10,8 @@ exports.loginAccount = async function (req, res) {
     if (!username || !password) {
       res.status(400).send("Fail Authentication");
     } else {
-      //GET ALL USERS
-      const users = await User.find({});
       //CHECK IF USERNAME AND PASSWORD ARE MATCHED WITH ANY USER PROFILE
-      const foundUser = users.find(
-        (user) => user.username === username && user.password === password
-      );
+      const foundUser = await User.findOne({ username, password });
 
       //IF THERE IS A MATCHED USER PROFILE
       if (foundUser) {
