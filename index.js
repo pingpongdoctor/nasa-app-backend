@@ -3,11 +3,12 @@ const handleConnectMongoDBServer = require("./config/db");
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const cookieparser = require("cookie-parser");
+const helmet = require("helmet");
 const PORT = process.env.PORT || 8080;
 const loginRoute = require("./routes/loginRoute");
 const signupRoute = require("./routes/signupRoute");
-const cookieparser = require("cookie-parser");
-const helmet = require("helmet");
+const userProfileRoute = require("./routes/userProfileRoute");
 
 //APPLY CORS MIDDLEWARE TO ALLOW DATABASE ACCESSED FROM ANY DOMAINS
 app.use(cors());
@@ -22,6 +23,7 @@ app.use(cookieparser());
 handleConnectMongoDBServer();
 
 //APPLY ROUTES
+app.use("./user-profile", userProfileRoute);
 app.use("/login", loginRoute);
 app.use("/signup", signupRoute);
 
