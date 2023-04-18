@@ -8,25 +8,20 @@ exports.signupNewAccount = async function (req, res) {
     if (!username || !password) {
       res.status(400).send("Please provide both username and password");
     } else {
-      //GET ALL USERS
-      const usersData = await User.find({});
+      //CHECK IF USERNAME IS USED OR NOT
+      const foundUser = await User.findOne({ username });
 
-      //CHECK IF USERNAME IS DUPLICATE
-      const isNotDuplicate = usersData.every(
-        (user) => user.username != username
-      );
-
-      //IF NOT DUPLICATE
-      if (isNotDuplicate) {
+      if (foundUser) {
+        //IF USERNAME IS USED
+        res.status(400).send("The username is used by another user");
+      } else {
+        //IF USERNAME HAS NOT BEEN USED
         //INSERT NEW USER PROFILE OBJECT
         await User.create({
           username,
           password,
         });
         res.status(201).send("New account has been created");
-      } else {
-        //IF DUPLICATE
-        res.status(400).send("The username is used by another user");
       }
     }
   } catch (e) {
