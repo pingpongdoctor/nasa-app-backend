@@ -9,9 +9,15 @@ const PORT = process.env.PORT || 8080;
 const loginRoute = require("./routes/loginRoute");
 const signupRoute = require("./routes/signupRoute");
 const userProfileRoute = require("./routes/userProfileRoute");
+const getNewAccessTokenRoute = require("./routes/getAccessTokenRoute");
 
-//APPLY CORS MIDDLEWARE TO ALLOW DATABASE ACCESSED FROM ANY DOMAINS
-app.use(cors());
+//APPLY CORS MIDDLEWARE TO ALLOW DATABASE ACCESSED FROM ANY DOMAINS AND TO ALLOW USING MULTIPLE ORIGINS (HEADERS AND COOKIES)
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 //APPLY MIDDLEWARE TO PARSE DATA IN REQUEST BODY AND MAKE IT AVAILABLE IN REQ.BODY
 app.use(express.json());
 //APPLY HELMET TO ADD SOME HTTP HEADERS FOR SECURITY ENHANCEMENT
@@ -23,9 +29,10 @@ app.use(cookieparser());
 handleConnectMongoDBServer();
 
 //APPLY ROUTES
-app.use("./user-profile", userProfileRoute);
+app.use("/user-profile", userProfileRoute);
 app.use("/login", loginRoute);
 app.use("/signup", signupRoute);
+app.use("/get-access-token", getNewAccessTokenRoute);
 
 app.use("/", (req, res) => {
   res.send("Hello");

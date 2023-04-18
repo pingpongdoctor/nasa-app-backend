@@ -1,7 +1,7 @@
 const User = require("../models/usersModel");
 
 //DEFINE CALLBACK FUNCTION TO GET USERPROFILE
-exports.getUserProfile = async function () {
+exports.getUserProfile = async function (req, res) {
   try {
     if (req.user) {
       const { _id } = req.user;
