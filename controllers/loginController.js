@@ -4,9 +4,9 @@ const User = require("../models/usersModel");
 
 //DEFINE A LOGIN CALLBACK FUNCTION
 exports.loginAccount = async function (req, res) {
+  console.log(req.body);
   try {
     const { username, password } = req.body;
-
     if (!username || !password) {
       res.status(400).send("Fail Authentication");
     } else {
@@ -35,10 +35,15 @@ exports.loginAccount = async function (req, res) {
           .cookie("refreshToken", refreshToken, {
             maxAge: 60 * 60 * 1000,
             httpOnly: true, //Avoid XSS
-            // samesite: "strict", //Avoid Cross-site request forgery
+            samesite: "lax", //Avoid Cross-site request forgery
             // secure: true, Use this to only allow cookie sent on https (need SSL/TLS certificate)
           })
-          .send(accessToken);
+          .cookie("accessToken", accessToken, {
+            maxAge: 60 * 15 * 1000,
+            httpOnly: true, //Avoid XSS
+            samesite: "lax",
+          })
+          .send("Access Token and Refresh Token are returned in Cookie ");
       } else {
         res.status(400).send("Fail Authentication");
       }
