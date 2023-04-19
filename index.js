@@ -10,14 +10,11 @@ const loginRoute = require("./routes/loginRoute");
 const signupRoute = require("./routes/signupRoute");
 const userProfileRoute = require("./routes/userProfileRoute");
 const logoutRoute = require("./routes/logoutRoute");
-const User = require("./models/usersModel");
-//GOOGLE AUTHENTICATION NEDDED LIBRARIES
-const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const expressSession = require("express-session");
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const SESSION_SECRET = process.env.SESSION_SECRET;
+const googleAuthRoute = require("./routes/googleAuthRoute");
+//GOOGLE AUTHENTICATION NEDDED LIBRARIES
+const passport = require("./config/passportConfig");
+const expressSession = require("express-session");
 
 //APPLY CORS MIDDLEWARE TO ALLOW DATABASE ACCESSED FROM ANY DOMAINS AND TO ALLOW USING MULTIPLE ORIGINS (HEADERS AND COOKIES)
 app.use(
@@ -33,62 +30,36 @@ app.use(helmet());
 //APPLY COOKIE PARSER TO PARSE DATA IN COOKIE AND MAKE IT AVAILABLE IN REQ.COOKIES
 app.use(cookieparser());
 
-// Include express-session middleware (with additional config options required for Passport session)
+app.use((req, res, next) => {
+  console.log("Logging request:", req.method, req.url);
+  next();
+});
+
+//SET TUP THE EXPRESS SESSION MIDDLEWARE
 app.use(
   expressSession({
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
+    cookie: { maxAge: 60 * 60 * 1000, httpOnly: true, sameSite: "lax" },
   })
 );
 
-// Initialize Passport middleware
+//INITIALIZE PASSPORT
 app.use(passport.initialize());
 
-// Passport.session converting session id from the client cookie into a deserialized user object
+// PASSPORT SESSION COVERT SESSION ID IN COOKIE TO USER ID AND PASS IT TO DESERIALIZE USER FUNCTION
 app.use(passport.session());
-
-//Google Strategy
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: `http://localhost:${PORT}/auth/google/callback`,
-    },
-    function (accessToken, refreshToken, profile, cb) {
-      console.log(profile.id);
-      // User.findOne({ googleId: profile.id }).then((data) => console.log(data));
-    }
-  )
-);
-
-// `serializeUser` determines which data of the auth user object should be stored in the session
-passport.serializeUser((user, done) => {
-  console.log("serializeUser (user object):", user);
-
-  // Store only the user id in session
-  done(null, user.id);
-});
-
-// `deserializeUser` receives a value sent from `serializeUser` `done` function
-// We can then retrieve full user information from our database using the userId
-passport.deserializeUser((userId, done) => {
-  console.log(userId);
-});
 
 //CONNECT TO THE MONGODB DATABASE
 handleConnectMongoDBServer();
 
 //APPLY ROUTES
+app.use("/auth", googleAuthRoute); //Put the /auth first to ensure that req.user is set before the JWT check token middlewares are invoked
 app.use("/user-profile", userProfileRoute);
 app.use("/login", loginRoute);
 app.use("/signup", signupRoute);
 app.use("/logout", logoutRoute);
-
-app.use("/", (req, res) => {
-  res.send("Hello");
-});
 
 //START THE SERVER
 app.listen(PORT, (req, res) => {

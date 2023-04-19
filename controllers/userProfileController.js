@@ -1,18 +1,14 @@
-const User = require("../models/usersModel");
-
 //DEFINE CALLBACK FUNCTION TO GET USERPROFILE
 exports.getUserProfile = async function (req, res) {
+  console.log("get user profile");
   try {
     if (req.user) {
-      const { _id } = req.user;
-      const userProfile = await User.findOne({ _id });
-      res
-        .status(200)
-        .json({ _id: userProfile._id, username: userProfile.username });
+      console.log(req.user);
+      res.status(200).json(req.user);
     } else {
       res.status(400).send("Need to login to get the user profile");
     }
   } catch (e) {
-    res.status(500).send("Server Error");
+    console.log(`Get user profile error ${e}`);
   }
 };

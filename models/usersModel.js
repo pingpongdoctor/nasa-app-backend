@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 //DEFINE USER SCHEMA
 const usersSchema = mongoose.Schema(
   {
-    googleid: {
+    google_id: {
       type: String,
       require: [false],
     },
