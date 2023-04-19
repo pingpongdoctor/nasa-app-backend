@@ -25,6 +25,6 @@ exports.signupNewAccount = async function (req, res) {
       }
     }
   } catch (e) {
-    throw new Error(e);
+    console.log(`Signup Error ${e}`);
   }
 };

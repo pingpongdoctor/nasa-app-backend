@@ -17,13 +17,19 @@ exports.checkAccessToken = async function (req, res, next) {
     } else {
       //IF ACCESS TOKEN IS PROVIDED
       if (jwt.verify(accessToken, JWT_SECRET)) {
+        //IF ACCESS TOKEN IS VALID
         const userProfile = jwt.decode(accessToken);
         req.user = userProfile;
+        next();
+        return;
+      } else {
+        //IF ACCESS TOKEN IS NOT VALID
         next();
         return;
       }
     }
   } catch (e) {
+    console.log(`Checking Access Token Error ${e}`);
     next();
     return;
   }

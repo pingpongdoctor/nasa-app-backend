@@ -38,13 +38,11 @@ passport.use(
 
 //STORE USER ID INTO THE SESSION DATA
 passport.serializeUser((userObj, done) => {
-  console.log("running serialize");
   done(null, userObj._id);
 });
 
 //STORE USER ID INTO THE REQ.USER
 passport.deserializeUser((userId, done) => {
-  console.log("running deserialize");
   User.findOne({ _id: userId })
     .then((user) => done(null, { _id: user._id, username: user.username }))
     .catch((e) => {

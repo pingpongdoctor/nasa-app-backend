@@ -14,12 +14,12 @@ exports.checkRefreshToken = async function (req, res, next) {
 
     //IF REFRESH TOKEN IS NOT PROVIDED
     if (!refreshToken) {
-      res.status(400).send("Refresh Token is not provided");
+      res.status(401).send("Refresh Token is not provided");
       return;
     } else {
       //IF REFRESH TOKEN IS PROVIDED
       if (refreshToken && jwt.verify(refreshToken, JWT_SECRET)) {
-        //CHECK IF THE USER PROFILE IS STILL AVAILABLE IN DATABASE
+        //IF REFRESH TOKEN IS VALID
         const userObj = jwt.decode(refreshToken);
         const foundUser = await User.findOne({
           _id: userObj._id,
@@ -56,13 +56,16 @@ exports.checkRefreshToken = async function (req, res, next) {
           return;
         }
       } else {
+        //IF THE REFRESH TOKEN IS NOT VALID
         res.status(400).send("Fail Authentication");
         return;
       }
     }
   } catch (e) {
+    console.log(`Refresh token Error ${e}`);
     res.clearCookie("refreshToken");
     res.clearCookie("accessToken");
-    res.status(500).send("Please login to access the database");
+    res.status(500).send("Please login again");
+    return;
   }
 };

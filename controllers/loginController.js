@@ -49,6 +49,6 @@ exports.loginAccount = async function (req, res) {
       }
     }
   } catch (e) {
-    throw new Error(e);
+    console.log(`Login Error ${e}`);
   }
 };

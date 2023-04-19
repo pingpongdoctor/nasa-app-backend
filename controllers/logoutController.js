@@ -1,10 +1,16 @@
-exports.handleLogout = function (_req, res) {
+exports.handleLogout = function (req, res) {
   try {
-    //CLEAR THE COOKIE
+    //RUN LOGOUT METHOD IN CASE THE USER IS AUTHENTICATED WITH GOOGLE ACCOUNT
+    req.logout((error) => {
+      if (error) {
+        console.log(`Logout error ${error}`);
+      }
+    });
+    //CLEAR THE TOKENS IN THE COOKIE
     res.clearCookie("refreshToken");
     res.clearCookie("accessToken");
-    res.status(200).send("The refresh token is deleted");
+    res.status(200).send("Tokens in Cookie are deleted");
   } catch (e) {
-    res.status(500).send("Server Error");
+    console.log(`Logout Error ${e}`);
   }
 };
