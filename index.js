@@ -10,6 +10,14 @@ const loginRoute = require("./routes/loginRoute");
 const signupRoute = require("./routes/signupRoute");
 const userProfileRoute = require("./routes/userProfileRoute");
 const logoutRoute = require("./routes/logoutRoute");
+const User = require("./models/usersModel");
+//GOOGLE AUTHENTICATION NEDDED LIBRARIES
+const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const expressSession = require("express-session");
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+const SESSION_SECRET = process.env.SESSION_SECRET;
 
 //APPLY CORS MIDDLEWARE TO ALLOW DATABASE ACCESSED FROM ANY DOMAINS AND TO ALLOW USING MULTIPLE ORIGINS (HEADERS AND COOKIES)
 app.use(
@@ -24,6 +32,50 @@ app.use(express.json());
 app.use(helmet());
 //APPLY COOKIE PARSER TO PARSE DATA IN COOKIE AND MAKE IT AVAILABLE IN REQ.COOKIES
 app.use(cookieparser());
+
+// Include express-session middleware (with additional config options required for Passport session)
+app.use(
+  expressSession({
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+// Initialize Passport middleware
+app.use(passport.initialize());
+
+// Passport.session converting session id from the client cookie into a deserialized user object
+app.use(passport.session());
+
+//Google Strategy
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
+      callbackURL: `http://localhost:${PORT}/auth/google/callback`,
+    },
+    function (accessToken, refreshToken, profile, cb) {
+      console.log(profile.id);
+      // User.findOne({ googleId: profile.id }).then((data) => console.log(data));
+    }
+  )
+);
+
+// `serializeUser` determines which data of the auth user object should be stored in the session
+passport.serializeUser((user, done) => {
+  console.log("serializeUser (user object):", user);
+
+  // Store only the user id in session
+  done(null, user.id);
+});
+
+// `deserializeUser` receives a value sent from `serializeUser` `done` function
+// We can then retrieve full user information from our database using the userId
+passport.deserializeUser((userId, done) => {
+  console.log(userId);
+});
 
 //CONNECT TO THE MONGODB DATABASE
 handleConnectMongoDBServer();
