@@ -9,7 +9,6 @@ const PORT = process.env.PORT || 8080;
 const loginRoute = require("./routes/loginRoute");
 const signupRoute = require("./routes/signupRoute");
 const userProfileRoute = require("./routes/userProfileRoute");
-const getNewAccessTokenRoute = require("./routes/getAccessTokenRoute");
 const logoutRoute = require("./routes/logoutRoute");
 
 //APPLY CORS MIDDLEWARE TO ALLOW DATABASE ACCESSED FROM ANY DOMAINS AND TO ALLOW USING MULTIPLE ORIGINS (HEADERS AND COOKIES)
@@ -33,7 +32,6 @@ handleConnectMongoDBServer();
 app.use("/user-profile", userProfileRoute);
 app.use("/login", loginRoute);
 app.use("/signup", signupRoute);
-app.use("/get-access-token", getNewAccessTokenRoute);
 app.use("/logout", logoutRoute);
 
 app.use("/", (req, res) => {

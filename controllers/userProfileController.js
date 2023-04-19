@@ -10,7 +10,7 @@ exports.getUserProfile = async function (req, res) {
         .status(200)
         .json({ _id: userProfile._id, username: userProfile.username });
     } else {
-      res.status(400).send("Need login to get the user profile");
+      res.status(400).send("Need to login to get the user profile");
     }
   } catch (e) {
     res.status(500).send("Server Error");

@@ -35,12 +35,13 @@ exports.loginAccount = async function (req, res) {
           .cookie("refreshToken", refreshToken, {
             maxAge: 60 * 60 * 1000,
             httpOnly: true, //Avoid XSS
-            // samesite: "strict", //Avoid Cross-site request forgery
+            samesite: "lax", //Avoid Cross-site request forgery
             // secure: true, Use this to only allow cookie sent on https (need SSL/TLS certificate)
           })
           .cookie("accessToken", accessToken, {
             maxAge: 60 * 15 * 1000,
             httpOnly: true, //Avoid XSS
+            samesite: "lax",
           })
           .send("Access Token and Refresh Token are returned in Cookie ");
       } else {
