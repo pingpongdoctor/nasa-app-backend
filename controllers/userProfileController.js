@@ -13,6 +13,6 @@ exports.getUserProfile = async function (req, res) {
       res.status(400).send("Need login to get the user profile");
     }
   } catch (e) {
-    throw new Error(e);
+    res.status(500).send("Server Error");
   }
 };
