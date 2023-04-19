@@ -30,17 +30,12 @@ app.use(helmet());
 //APPLY COOKIE PARSER TO PARSE DATA IN COOKIE AND MAKE IT AVAILABLE IN REQ.COOKIES
 app.use(cookieparser());
 
-app.use((req, res, next) => {
-  console.log("Logging request:", req.method, req.url);
-  next();
-});
-
 //SET TUP THE EXPRESS SESSION MIDDLEWARE
 app.use(
   expressSession({
     secret: SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: { maxAge: 60 * 60 * 1000, httpOnly: true, sameSite: "lax" },
   })
 );
@@ -48,7 +43,7 @@ app.use(
 //INITIALIZE PASSPORT
 app.use(passport.initialize());
 
-// PASSPORT SESSION COVERT SESSION ID IN COOKIE TO USER ID AND PASS IT TO DESERIALIZE USER FUNCTION
+// PASSPORT SESSION CALL THE DESERIALIZE USER FUNCTION AND PASS THE USER ID TO THE PARAMETER OF THIS FUNCTION
 app.use(passport.session());
 
 //CONNECT TO THE MONGODB DATABASE
