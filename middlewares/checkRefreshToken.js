@@ -44,7 +44,8 @@ exports.checkRefreshToken = async function (req, res, next) {
             .cookie("accessToken", newAccessToken, {
               maxAge: 60 * 15 * 1000,
               httpOnly: true, //Avoid XSS
-              samesite: "lax",
+              sameSite: "none",
+              secure: true,
             })
             .send("New access token is created");
           return;
