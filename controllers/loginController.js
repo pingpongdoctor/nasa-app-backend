@@ -19,27 +19,29 @@ exports.loginAccount = async function (req, res) {
           _id: foundUser._id,
           username: foundUser.username,
         };
-        //CREATE ACCESS TOKEN THAT IS EXPIRED IN 15 MINUTES
+
+        //CREATE ACCESS TOKEN EXPIRED IN 15 MINUTES
         const accessToken = jwt.sign(payloadObj, JWT_SECRET, {
           expiresIn: 60 * 15,
         });
-        //CREATE REFRESH TOKEN THAT IS EXPIRED IN 1 HOUR
+
+        //CREATE REFRESH TOKEN EXPIRED IN 1 HOUR
         const refreshToken = jwt.sign(payloadObj, JWT_SECRET, {
           expiresIn: "1h",
         });
-        //RESPONSE REFRESH TOKEN IN COOKIE AND ACCESS TOKEN IN THE SEND METHOD
-        //THE COOKIE EXPIRY TIME IS 1 HOUR
+
+        //RESPONSE REFRESH TOKEN IN COOKIE AND ACCESS TOKEN IN COOKIE
         res
           .status(200)
           .cookie("refreshToken", refreshToken, {
             maxAge: 60 * 60 * 1000,
             httpOnly: true, //Avoid XSS
-            sameSite: "none", //Avoid Cross-site request forgery
+            sameSite: "none",
             secure: true,
           })
           .cookie("accessToken", accessToken, {
             maxAge: 60 * 15 * 1000,
-            httpOnly: true, //Avoid XSS
+            httpOnly: true,
             sameSite: "none",
             secure: true,
           })
