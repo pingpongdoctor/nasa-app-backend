@@ -1,11 +1,13 @@
+//CALLBACK FUNCTION TO LOG OUT
 exports.handleLogout = function (req, res) {
   try {
-    //RUN LOGOUT METHOD IN CASE THE USER IS AUTHENTICATED WITH GOOGLE ACCOUNT
+    //RUN LOGOUT METHOD
     req.logout((e) => {
       if (e) {
         console.log(`Logout error ${e}`);
       }
     });
+
     //CLEAR THE TOKENS IN THE COOKIE
     res
       .clearCookie("refreshToken")

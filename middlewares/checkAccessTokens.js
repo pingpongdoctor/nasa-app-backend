@@ -3,6 +3,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 //DEFINE THE MIDDILEWARE TO CHECK ACCESS TOKEN AND REFRESH TOKEN
 exports.checkAccessToken = async function (req, _res, next) {
+  //CHECK IF THE USER IS AUTHENTICATED
   if (req.user) {
     next();
     return;
@@ -10,7 +11,8 @@ exports.checkAccessToken = async function (req, _res, next) {
 
   try {
     const accessToken = req.cookies.accessToken;
-    //IF ACCESS TOKEN IS PROVIDED
+
+    //IF ACCESS TOKEN IS NOT PROVIDED
     if (!accessToken) {
       next();
       return;

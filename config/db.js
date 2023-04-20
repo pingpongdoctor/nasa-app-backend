@@ -6,8 +6,10 @@ const handleConnectMongoDBServer = async function () {
   try {
     //SET THE STRICTQUERY TO TRUE
     await mongoose.set("strictQuery", true);
+
     //CONNECT TO SERVER
     const conn = await mongoose.connect(uri);
+
     //LOG THE HOST TO THE CONSOLE
     console.log(conn.connection.host);
   } catch (e) {

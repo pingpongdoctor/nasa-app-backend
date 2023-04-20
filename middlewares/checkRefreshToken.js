@@ -4,6 +4,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 //DEFINE THE MIDDLEWARE TO CHECK THE REFRESH TOKEN
 exports.checkRefreshToken = async function (req, res, next) {
+  //CHECK IF THE USER IS AUTHENTICATED
   if (req.user) {
     next();
     return;
@@ -26,7 +27,7 @@ exports.checkRefreshToken = async function (req, res, next) {
           username: userObj.username,
         });
 
-        //IF USER OF THIS REFRESH TOKEN IS STILL AVAILABLE IN DATABASE
+        // IF THE USER OF THIS REFRESH TOKEN IS STILL AVAILABLE IN DATABASE
         if (foundUser) {
           const newAccessToken = jwt.sign(
             {
@@ -70,7 +71,7 @@ exports.checkRefreshToken = async function (req, res, next) {
       .clearCookie("refreshToken")
       .clearCookie("accessToken")
       .status(500)
-      .send("Please login again");
+      .send("Please log in again");
     return;
   }
 };
