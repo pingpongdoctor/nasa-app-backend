@@ -50,9 +50,11 @@ exports.checkRefreshToken = async function (req, res, next) {
           return;
         } else {
           //IF USER IS NOT AVAILABLE IN THE DATABASE
-          res.clearCookie("refreshToken");
-          res.clearCookie("accessToken");
-          res.status(500).send("User is not available in the database");
+          res
+            .clearCookie("refreshToken")
+            .clearCookie("accessToken")
+            .status(500)
+            .send("User is not available in the database");
           return;
         }
       } else {
@@ -63,9 +65,11 @@ exports.checkRefreshToken = async function (req, res, next) {
     }
   } catch (e) {
     console.log(`Refresh token Error ${e}`);
-    res.clearCookie("refreshToken");
-    res.clearCookie("accessToken");
-    res.status(500).send("Please login again");
+    res
+      .clearCookie("refreshToken")
+      .clearCookie("accessToken")
+      .status(500)
+      .send("Please login again");
     return;
   }
 };

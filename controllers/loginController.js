@@ -4,7 +4,6 @@ const User = require("../models/usersModel");
 
 //DEFINE A LOGIN CALLBACK FUNCTION
 exports.loginAccount = async function (req, res) {
-  console.log(req.body);
   try {
     const { username, password } = req.body;
     if (!username || !password) {
