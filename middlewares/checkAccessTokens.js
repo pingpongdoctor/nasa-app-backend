@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 
 //DEFINE THE MIDDILEWARE TO CHECK ACCESS TOKEN AND REFRESH TOKEN
-exports.checkAccessToken = async function (req, res, next) {
+exports.checkAccessToken = async function (req, _res, next) {
   if (req.user) {
     next();
     return;
