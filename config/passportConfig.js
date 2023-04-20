@@ -11,7 +11,7 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: `http://localhost:${PORT}/auth/google/callback`,
+      callbackURL: `https://nasa-app-backend.vercel.app/auth/google/callback`,
     },
     function (_accessToken, _refreshToken, profile, done) {
       const { id: google_id, name: nameObj } = profile;
