@@ -38,9 +38,12 @@ app.use(
   expressSession({
     secret: SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: {
       secure: true,
+      maxAge: 60 * 60 * 1000,
+      httpOnly: true,
+      sameSite: "none",
     },
   })
 );
