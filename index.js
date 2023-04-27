@@ -39,6 +39,7 @@ app.use(helmet());
 app.use(cookieparser());
 
 //SET UP THE EXPRESS SESSION MIDDLEWARE
+app.set("trust proxy", 1);
 app.use(
   expressSession({
     secret: SESSION_SECRET,
@@ -94,13 +95,11 @@ passport.use(
 
 //SET UP SERIALIZEUSER
 passport.serializeUser((userObj, done) => {
-  console.log(userObj);
   done(null, userObj._id);
 });
 
 //SSET UP DESERIALIZEUSER
 passport.deserializeUser((userId, done) => {
-  console.log(userId);
   User.findOne({ _id: userId })
     .then((user) => done(null, { _id: user._id, username: user.username }))
     .catch((e) => {
