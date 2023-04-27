@@ -94,11 +94,13 @@ passport.use(
 
 //SET UP SERIALIZEUSER
 passport.serializeUser((userObj, done) => {
+  console.log(userObj);
   done(null, userObj._id);
 });
 
 //SSET UP DESERIALIZEUSER
 passport.deserializeUser((userId, done) => {
+  console.log(userId);
   User.findOne({ _id: userId })
     .then((user) => done(null, { _id: user._id, username: user.username }))
     .catch((e) => {
