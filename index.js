@@ -39,11 +39,11 @@ app.use(
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      maxAge: 60 * 60 * 1000,
-      httpOnly: true,
-      secure: true,
-    },
+    // cookie: {
+    //   maxAge: 60 * 60 * 1000,
+    //   httpOnly: true,
+    //   secure: true,
+    // },
   })
 );
 
