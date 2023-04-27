@@ -10,8 +10,14 @@ exports.handleLogout = function (req, res) {
 
     //CLEAR THE TOKENS IN THE COOKIE
     res
-      .clearCookie("refreshToken", { path: "/" })
-      .clearCookie("accessToken", { path: "/" })
+      .clearCookie("refreshToken", {
+        sameSite: "none",
+        secure: true,
+      })
+      .clearCookie("accessToken", {
+        sameSite: "none",
+        secure: true,
+      })
       .status(200)
       .send("Tokens in Cookie are deleted");
   } catch (e) {

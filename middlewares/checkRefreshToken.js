@@ -41,7 +41,7 @@ exports.checkRefreshToken = async function (req, res, next) {
           );
 
           res
-            .status(200)
+            .status(201)
             .cookie("accessToken", newAccessToken, {
               maxAge: 60 * 15 * 1000,
               httpOnly: true, //Avoid XSS
