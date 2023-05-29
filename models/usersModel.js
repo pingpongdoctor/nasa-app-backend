@@ -3,15 +3,21 @@ const mongoose = require("mongoose");
 //DEFINE USER SCHEMA
 const usersSchema = mongoose.Schema(
   {
-    google_id: {
-      type: String,
-      require: [false],
-    },
-    username: {
+    email: {
       type: String,
       require: [true],
     },
+    //CREDENTIALS
+    username: {
+      type: String,
+      require: [false],
+    },
     password: {
+      type: String,
+      require: [false],
+    },
+    //GOOGLE AUTHENTICATION
+    google_id: {
       type: String,
       require: [false],
     },
